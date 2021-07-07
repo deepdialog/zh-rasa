@@ -8,8 +8,8 @@ config.yml
 language: zh
 
 pipeline:
-  - name: zh_rasa.classifiers.TFNLUClassifier
-  - name: zh_rasa.extractors.TFNLUExtractor
+  - name: zh_rasa.TFNLUClassifier
+  - name: zh_rasa.TFNLUExtractor
 ```
 
 or using bert, please check https://github.com/qhduan/bert-model
@@ -18,8 +18,8 @@ or using bert, please check https://github.com/qhduan/bert-model
 language: zh
 
 pipeline:
-  - name: zh_rasa.classifiers.TFNLUClassifier
+  - name: zh_rasa.TFNLUClassifier
     encoder_path: /path/to/bert/
-  - name: zh_rasa.extractors.TFNLUExtractor
+  - name: zh_rasa.TFNLUExtractor
     encoder_path: /path/to/bert/
 ```
