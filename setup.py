@@ -29,7 +29,7 @@ VERSION = os.path.join(
 )
 
 setup(
-    name='tfnlu',
+    name='zh-rasa',
     version=open(VERSION, 'r').read().strip(),
     keywords=('nlp', 'nlu'),
     description='Chinese NLP tool for RASA',

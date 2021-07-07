@@ -2,3 +2,6 @@
 env
 *.log
 *.out
+*.egg-info
+build
+dist
