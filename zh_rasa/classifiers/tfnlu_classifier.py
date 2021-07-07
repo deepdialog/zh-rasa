@@ -1,7 +1,5 @@
 import logging
 import os
-import shutil
-import tempfile
 import pickle
 from typing import Any, Dict, Optional, Text
 
@@ -54,13 +52,8 @@ class TFNLUClassifier(Component):
             X.append(list(text))
             Y.append(intent)
 
-        model = Classification(encoder_path=self.encoder_path)
+        self.model = model = Classification(encoder_path=self.encoder_path)
         model.fit(X, Y, batch_size=min(32, len(X)), epochs=20)
-
-        self.result_dir = tempfile.mkdtemp()
-        model_path = os.path.join(self.result_dir, 'model.pkl')
-        with open(model_path, 'wb') as fp:
-            pickle.dump(model, fp)
 
     @classmethod
     def load(
@@ -74,9 +67,8 @@ class TFNLUClassifier(Component):
         if cached_component:
             return cached_component
         else:
-            real_result_dir = os.path.join(model_dir, meta['result_dir'])
-            model_path = os.path.join(real_result_dir, 'model.pkl')
-            with open(model_path, 'rb') as fp:
+            path = os.path.join(model_dir, self.name + '.pkl')
+            with open(path, 'rb') as fp:
                 model = pickle.load(fp)
             return cls(meta, model)
 
@@ -97,6 +89,7 @@ class TFNLUClassifier(Component):
         """Persist this model into the passed directory.
         Returns the metadata necessary to load the model again."""
 
-        saved_model_dir = os.path.join(model_dir, self.name)
-        shutil.copytree(self.result_dir, saved_model_dir)
-        return {'result_dir': self.name}
+        path = os.path.join(model_dir, self.name + '.pkl')
+        with open(path, 'wb') as fp:
+            pickle.dump(self.model, fp)
+        return {}
