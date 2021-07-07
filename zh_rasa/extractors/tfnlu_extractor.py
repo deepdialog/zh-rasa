@@ -74,7 +74,7 @@ class TFNLUExtractor(EntityExtractor):
         if cached_component:
             return cached_component
         else:
-            path = os.path.join(model_dir, self.name + '.pkl')
+            path = os.path.join(model_dir, meta['name'] + '.pkl')
             with open(path, 'rb') as fp:
                 model = pickle.load(fp)
             return cls(meta, model)
@@ -95,7 +95,7 @@ class TFNLUExtractor(EntityExtractor):
                     "end": ent[1],
                     "confidence": None
                 })
-            logger.debug('predict entities %s %s', text, len(ent_data))
+            logger.debug('predict entities %s %s', text, str(ent_data))
             message.set("entities",
                         message.get(ENTITIES, []) + ent_data,
                         add_to_output=True)
@@ -107,4 +107,4 @@ class TFNLUExtractor(EntityExtractor):
         path = os.path.join(model_dir, self.name + '.pkl')
         with open(path, 'wb') as fp:
             pickle.dump(self.model, fp)
-        return {}
+        return { 'name': self.name }

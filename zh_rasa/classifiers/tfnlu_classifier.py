@@ -67,7 +67,7 @@ class TFNLUClassifier(Component):
         if cached_component:
             return cached_component
         else:
-            path = os.path.join(model_dir, self.name + '.pkl')
+            path = os.path.join(model_dir, meta['name'] + '.pkl')
             with open(path, 'rb') as fp:
                 model = pickle.load(fp)
             return cls(meta, model)
@@ -76,7 +76,7 @@ class TFNLUClassifier(Component):
         text = message.get(TEXT)
         if text:
             logger.debug('predict intent %s', text)
-            pred, probs = self.model.predict_proba([list(text)])
+            pred, probs = self.model.predict_proba([list(text)], verbose=0)
             intent = {"name": pred[0], "confidence": probs[0]}
             logger.debug('predict intent %s %s', text, pred[0])
             print(intent)
@@ -92,4 +92,4 @@ class TFNLUClassifier(Component):
         path = os.path.join(model_dir, self.name + '.pkl')
         with open(path, 'wb') as fp:
             pickle.dump(self.model, fp)
-        return {}
+        return { 'name': self.name }
