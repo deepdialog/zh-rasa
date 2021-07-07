@@ -3,20 +3,16 @@ import os
 import pickle
 import shutil
 import tempfile
-import typing
-from typing import Any, Dict, List, Optional, Text, Tuple, Callable
+from typing import Any, Dict, Optional, Text
 
-from rasa.nlu.config import InvalidConfigError, RasaNLUModelConfig
+from rasa.nlu.config import RasaNLUModelConfig
 from rasa.nlu.extractors.extractor import EntityExtractor
 from rasa.nlu.model import Metadata
+from rasa.nlu.components import Component
 from rasa.shared.nlu.training_data.message import Message
 from rasa.shared.nlu.training_data.training_data import TrainingData
 from rasa.shared.nlu.constants import ENTITIES, TEXT
 
-
-if typing.TYPE_CHECKING:
-    from tokenizer_tools.tagset.offset.sequence import Sequence
-    import sklearn_crfsuite
 
 logger = logging.getLogger(__name__)
 
@@ -33,8 +29,7 @@ class TFNLUExtractor(EntityExtractor):
                  model=None) -> None:
 
         self.model = model
-        self.result_dir = None if 'result_dir' not in component_config else \
-        component_config['result_dir']
+        self.result_dir = None if 'result_dir' not in component_config else component_config['result_dir']
         self.batch_size = component_config.get("batch_size", 32)
         self.epochs = component_config.get("epochs", 20)
         self.encoder_path = component_config.get('encoder_path', None)
@@ -81,11 +76,10 @@ class TFNLUExtractor(EntityExtractor):
         model_metadata: Optional["Metadata"] = None,
         cached_component: Optional["Component"] = None,
         **kwargs: Any
-    ) -> "Component":
+    ) -> Component:
         if cached_component:
             return cached_component
         else:
-            from tfnlu import Tagger
             real_result_dir = os.path.join(model_dir, meta['result_dir'])
             model_path = os.path.join(real_result_dir, 'model.pkl')
             with open(model_path, 'rb') as fp:
