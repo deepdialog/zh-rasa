@@ -90,6 +90,7 @@ class TFNLUExtractor(EntityExtractor):
         from tfnlu.tagger.extract_entities import extract_entities
         text = message.get(TEXT)
         if text:
+            logger.debug('predict entities %s', text)
             pred = self.model.predict([list(text)], verbose=0)
             entities = extract_entities(pred[0], text)
             ent_data = []
@@ -101,7 +102,7 @@ class TFNLUExtractor(EntityExtractor):
                     "end": ent[1],
                     "confidence": None
                 })
-            print(ent_data)
+            logger.debug('predict entities %s %s', text, len(ent_data))
             message.set("entities",
                         message.get(ENTITIES, []) + ent_data,
                         add_to_output=True)

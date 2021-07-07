@@ -83,8 +83,10 @@ class TFNLUClassifier(Component):
     def process(self, message: Message, **kwargs: Any) -> None:
         text = message.get(TEXT)
         if text:
+            logger.debug('predict intent %s', text)
             pred, probs = self.model.predict_proba([list(text)])
             intent = {"name": pred[0], "confidence": probs[0]}
+            logger.debug('predict intent %s %s', text, pred[0])
             print(intent)
             message.set(INTENT, intent, add_to_output=True)
 
