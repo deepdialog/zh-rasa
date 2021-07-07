@@ -53,7 +53,7 @@ class TFNLUClassifier(Component):
             Y.append(intent)
 
         self.model = model = Classification(encoder_path=self.encoder_path)
-        model.fit(X, Y, batch_size=min(32, len(X)), epochs=20)
+        model.fit(X, Y, batch_size=min(self.batch_size, len(X)), epochs=self.epochs)
 
     @classmethod
     def load(

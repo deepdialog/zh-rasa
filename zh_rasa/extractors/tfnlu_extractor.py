@@ -60,7 +60,7 @@ class TFNLUExtractor(EntityExtractor):
             Y.append(y)
 
         self.model = model = Tagger(encoder_path=self.encoder_path)
-        model.fit(X, Y, validation_data=(X, Y), batch_size=min(len(X), 32), epochs=100)
+        model.fit(X, Y, validation_data=(X, Y), batch_size=min(len(X), self.batch_size), epochs=self.epochs)
 
     @classmethod
     def load(
