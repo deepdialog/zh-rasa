@@ -1,0 +1,2 @@
+include zh_rasa/version.txt
+include zh_rasa/tokenizers/vocab.txt
