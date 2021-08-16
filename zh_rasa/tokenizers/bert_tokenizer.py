@@ -34,7 +34,7 @@ class BertTokenizer(Tokenizer):
         ret = self.tokenizer.encode(text, add_special_tokens=False)
         tokens = []
 
-        for token_text, (start, end) in ret:
+        for token_text, (start, end) in zip(ret.tokens, ret.offsets):
             token = Token(token_text, start, end)
             tokens.append(token)
 
